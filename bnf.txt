@@ -1,0 +1,49 @@
+
+<BYTE> ::= %x00-FF
+
+# consume packet's remaining bytes; max length limited by encapsulating layer
+<PAYLOAD> ::= .*
+
+<NUL> ::= %x00
+
+# zero-length strings not permitted; max length limited by encapsulating layer
+<STRING> ::= {%x01-FF}+
+
+<A> ::= "A" / "a"
+<C> ::= "C" / "c"
+<E> ::= "E" / "e"
+<I> ::= "I" / "i"
+<L> ::= "L" / "l"
+<M> ::= "M" / "m"
+<N> ::= "N" / "n"
+<O> ::= "O" / "o"
+<S> ::= "S" / "s"
+<T> ::= "T" / "t"
+
+# these strings are accepted case-insensitively
+<NETASCII> ::= <N> <E> <T> <A> <S> <C> <I> <I>
+<OCTET> ::= <O> <C> <T> <E> <T>
+<MAIL> ::= <M> <A> <I> <L>
+
+<STR_MODE> ::= <NETASCII> / <OCTET> / <MAIL>
+
+# two-byte int, network order
+<BLOCK_NUM> ::= <BYTE> <BYTE>
+
+# two-byte int, network order
+<ERROR_CODE> ::= <BYTE> <BYTE>
+
+<OP_RRQ> ::= <NUL> %x01
+<OP_WRQ> ::= <NUL> %x02
+<OP_DATA> ::= <NUL> %x03
+<OP_ACK> ::= <NUL> %x04
+<OP_ERROR> ::= <NUL> %x05
+
+<PKT_RRQ> ::= <OP_RRQ> <STRING> <NUL> <STR_MODE> <NUL>
+<PKT_WRQ> ::= <OP_WRQ> <STRING> <NUL> <STR_MODE> <NUL>
+<PKT_DATA> ::= <OP_DATA> <BLOCK_NUM> <PAYLOAD>
+<PKT_ACK> ::= <OP_ACK> <BLOCK_NUM>
+<PKT_ERROR> ::= <OP_ERROR> <ERR_CODE> <ERR_MSG> <NUL>
+
+<PACKET> ::= <PKT_RRQ> / <PKT_WRQ> / <PKT_DATA> / <PKT_ACK> / <PKT_ERROR>
+
