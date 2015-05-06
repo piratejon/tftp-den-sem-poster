@@ -35,6 +35,7 @@
 \usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
 \usepackage{amsfonts, amsmath, amsthm, amssymb} % For math fonts, symbols and environments
 \usepackage{wrapfig} % Allows wrapping text around tables and figures
+\usepackage[nounderscore]{syntax}
 
 \begin{document}
 
@@ -50,8 +51,8 @@
 %
 \hspace{9cm}
 \begin{minipage}[b]{0.59\linewidth}
-\veryHuge \color{NavyBlue} \textbf{Unnecessarily Complicated Research Title} \color{Black}\\ % Title
-\Huge\textit{An Exploration of Complexity}\\[1cm] % Subtitle
+\veryHuge \color{NavyBlue} \textbf{Curing Sorceror's Apprentice Syndrome} \color{Black}\\ % Title
+\Huge\textit{An Application of Formal Semantics to a Real-World Protocol}\\[1cm] % Subtitle
 \huge \textbf{Jonathan Wesley Stone}\\ % Author(s)
 \huge Advisor: Dr. Tom Turner\\
 \huge University of Central Oklahoma Department of Computer Science\\ % University/organization
@@ -76,7 +77,7 @@
 
 \begin{abstract}
 
-Sed fringilla tempus hendrerit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam ut elit sit amet metus lobortis consequat sit amet in libero. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel sem magna. Nunc at convallis urna. isus ante. Pellentesque condimentum dui. Etiam sagittis purus non tellus tempor volutpat. Donec et dui non massa tristique adipiscing. Quisque vestibulum eros eu. Phasellus imperdiet, tortor vitae congue bibendum, felis enim sagittis lorem, et volutpat ante orci sagittis mi. Morbi rutrum laoreet semper. Morbi accumsan enim nec tortor consectetur non commodo nisi sollicitudin. Proin sollicitudin. Pellentesque eget orci eros. Fusce ultricies, tellus et pellentesque fringilla, ante massa luctus libero, quis tristique purus urna nec nibh.
+The formal semantics of computer languages may be specified operationally, denotationally, or axiomatically. This poster considers the TFTP protocol as a computer language. The protocol's grammar is taken as the language's syntax. Protocol endpoints emit language statements which are interpreted by their remote counterparts. Semantics are understood as defining protocol endpoint behavior. Operational and denotational semantics are modeled and evaluated. The sorceror's apprentice syndrome condition arising from under-specified operational semantics is identified by denotational semantics. The denotational semantic description is modified to correct the syndrome without sacrificing the protocol's functional usefulness.
 
 \end{abstract}
 
@@ -103,14 +104,14 @@ Phasellus imperdiet, tortor vitae congue bibendum, felis enim sagittis lorem, et
 \section*{Main Objectives}
 
 \begin{enumerate}
-\item Lorem ipsum dolor sit amet, consectetur.
-\item Nullam at mi nisl. Vestibulum est purus, ultricies cursus volutpat sit amet, vestibulum eu.
-\item Praesent tortor libero, vulputate quis elementum a, iaculis.
-\item Phasellus a quam mauris, non varius mauris. Fusce tristique, enim tempor varius porta, elit purus commodo velit, pretium mattis ligula nisl nec ante.
-\item Ut adipiscing accumsan sapien, sit amet pretium.
-\item Estibulum est purus, ultricies cursus volutpat
-\item Nullam at mi nisl. Vestibulum est purus, ultricies cursus volutpat sit amet, vestibulum eu.
-\item Praesent tortor libero, vulputate quis elementum a, iaculis.
+\item Characterize the protocol TFTP as a computer language.
+\item Describe the TFTP language syntax.
+\item Describe TFTP's operational semantics.
+\item Present a model of TFTP's denotational semantics.
+\item Illustrate successful ``execution'' of a TFTP ``program''.
+\item Illustrate a problematic execution -- known as Sorceror's Apprentice Syndrome.
+\item Modify the denotational semantics to preclude Sorceror's Apprentice Syndrome.
+\item Translate the modified denotational semantics back into operational semantics.
 \end{enumerate}
 
 %----------------------------------------------------------------------------------------
@@ -119,7 +120,50 @@ Phasellus imperdiet, tortor vitae congue bibendum, felis enim sagittis lorem, et
 
 \section*{Materials and Methods}
 
-Fusce magna risus, molestie ut porttitor in, consectetur sed mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Pellentesque consectetur blandit pellentesque. Sed odio justo, viverra nec porttitor vel, lacinia a nunc. Suspendisse pulvinar euismod arcu, sit amet accumsan enim fermentum quis. In id mauris ut dui feugiat egestas. Vestibulum ac turpis lacinia nisl commodo sagittis eget sit amet sapien. Phasellus imperdiet, tortor vitae congue bibendum, felis enim sagittis lorem, et volutpat ante orci sagittis mi. Morbi rutrum laoreet semper. Morbi accumsan enim nec tortor consectetur non commodo nisi sollicitudin. Proin sollicitudin. Pellentesque eget orci eros. Fusce ultricies, tellus et pellentesque fringilla, ante massa luctus libero, quis tristique purus urna nec nibh. Proin sollicitudin. Pellentesque eget orci eros. Fusce ultricies, tellus et pellentesque fringilla, ante massa luctus libero, quis tristique purus urna nec nibh.
+TFTP's grammar as defined in RFC 783, in Augmented BNF:
+\begin{grammar}
+<BYTE> ::= \%x00-FF
+
+<PAYLOAD> ::= .*
+
+<NUL> ::= \%x00
+
+<STRING> ::= {\%x01-FF}+
+
+<NETASCII> ::= "netascii"
+
+<OCTET> ::= "octet"
+
+<MAIL> ::= "mail"
+
+<STR\_MODE> ::= <NETASCII> / <OCTET> / <MAIL>
+
+<BLOCK\_NUM> ::= <BYTE> <BYTE>
+
+<ERROR\_CODE> ::= <BYTE> <BYTE>
+
+<OP\_RRQ> ::= <NUL> \%x01
+
+<OP\_WRQ> ::= <NUL> \%x02
+
+<OP\_DATA> ::= <NUL> \%x03
+
+<OP\_ACK> ::= <NUL> \%x04
+
+<OP\_ERROR> ::= <NUL> \%x05
+
+<PKT\_RRQ> ::= <OP\_RRQ> <STRING> <NUL> <STR\_MODE> <NUL>
+
+<PKT\_WRQ> ::= <OP\_WRQ> <STRING> <NUL> <STR\_MODE> <NUL>
+
+<PKT\_DATA> ::= <OP\_DATA> <BLOCK\_NUM> <PAYLOAD>
+
+<PKT\_ACK> ::= <OP\_ACK> <BLOCK\_NUM>
+
+<PKT\_ERROR> ::= <OP\_ERROR> <ERR\_CODE> <ERR\_MSG> <NUL>
+
+<PACKET> ::= <PKT\_RRQ> / <PKT\_WRQ> / <PKT\_DATA> / <PKT\_ACK> / <PKT\_ERROR>
+\end{grammar}
 
 %------------------------------------------------
 
