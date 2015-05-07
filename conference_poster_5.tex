@@ -165,12 +165,24 @@ Well-formed packets recognized by the above individually form the alphabet of th
 
 This formalizes the end-point behavior described in RFC 783, namely that a session is initiated with PKT\_RRQ or PKT\_WRQ, and file blocks are sent one at a time via DATA commands which are each acknowledged by a ACK tagged with the block ID. If an endpoint times out awaiting an expected DATA or ACK it assumes this was lost and resends its own last packet by way of requesting retransmission, until all blocks have been transmitted or an error occurs. Figure n illustrates a successful transfer under this scheme, including once instance where block $j$ is lost and retransmitted, enabling recovery and successful completion:
 
-The loop only moves onto the next block when both the DATA and ACK have been transmitted. This provides assurance
+The loop only moves onto the next block when both the DATA and ACK have been transmitted. This provides assurance that all blocks are ultimately transmitted and received by the time the last block has been transmitted. This presents a problem, however. In the unlikely event a particular packet cannot be transmitted (i.e. continually gets lost/dropped), the transmission may never complete and the program theoretically does not terminate. In a more likely scenario, packets can be delayed in transmission beyond the timeout value. Intuitionally, the endpoint need not resend a packet which has been acknowledged, but the current specification does not provide for that exception.
 %------------------------------------------------
 
 \subsection*{Mathematical Section}
 
-Nulla vel nisl sed mauris auctor mollis non sed. 
+\begin{grammar}
+<START> ::= $\big[$<PKT\_RRQ>$_{f}$ <PKT\_WRQ>$_{f}\big]$ <LOOP>$_{f,1}$
+
+<DATA\_TIMEOUT$_{f,i}$> ::= 
+
+<DATA$_{f,i}$> ::= <DATA\_PKT>$_{f,i}$ <DATA\_TIMEOUT>$_{f,i}$
+
+<LOOP$_{f,i}$> ::= <DATA>$_{f,i}$ <ACK>$_{f,i}$ <LOOP>$_{f,i+1}$ $\big/$ <STOP>
+
+<STOP ::= <DATA>$_{f,n}$ <ACK>$_{f,n}$ $\big/$ <PKT\_ERROR>
+\end{grammar}
+
+It may be 
 
 \begin{equation}
 E = mc^{2}
