@@ -89,11 +89,9 @@ The formal semantics of computer languages may be specified operationally, denot
 
 \section*{Introduction}
 
-Aliquam non lacus dolor, \textit{a aliquam quam} \cite{Smith:2012qr}. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla in nibh mauris. Donec vel ligula nisi, a lacinia arcu. Sed mi dui, malesuada vel consectetur et, egestas porta nisi. Sed eleifend pharetra dolor, et dapibus est vulputate eu. \textbf{Integer faucibus elementum felis vitae fringilla.} In hac habitasse platea dictumst. Duis tristique rutrum nisl, nec vulputate elit porta ut. Donec sodales sollicitudin turpis sed convallis. Etiam mauris ligula, blandit adipiscing condimentum eu, dapibus pellentesque risus.
+TFTP is a simple (\textit{trivial}) file transfer protocol introduced in 1981 in RFC 783 \cite{Sollins:1983}.  A TFTP session between an initiating client and listening server supports the transmission of one file in either direction, via the client's read or write request. The protocol specifies five packet types which either endpoint is called upon to complementarily issue and handle at various points throughout the transfer. The file is transmitted in packets of 512-byte blocks. The session is terminated when the file transfer is complete.
 
-\textit{Aliquam auctor}, metus id ultrices porta, risus enim cursus sapien, quis iaculis sapien tortor sed odio. Mauris ante orci, euismod vitae tincidunt eu, porta ut neque. Aenean sapien est, viverra vel lacinia nec, venenatis eu nulla. Maecenas ut nunc nibh, et tempus libero. Aenean vitae risus ante. Pellentesque condimentum dui. Etiam sagittis purus non tellus tempor volutpat. Donec et dui non massa tristique adipiscing.
-
-Phasellus imperdiet, tortor vitae congue bibendum, felis enim sagittis lorem, et volutpat ante orci sagittis mi. Morbi rutrum laoreet semper. Morbi accumsan enim nec tortor consectetur non commodo nisi sollicitudin. Proin sollicitudin. Pellentesque eget orci eros. Fusce ultricies, tellus et pellentesque fringilla, ante massa luctus libero, quis tristique \textbf{purus urna nec nibh}.
+TFTP is treated here as a formal language whose alphabet consists of packets admitted by the protocol grammar and whose valid strings consist of sequences of those packets. The distinction is drawn between individual packets which are well-formed byte sequences recognized by the protocol grammar, and packet sequences which are recognized by the proposed formal language. A TFTP session between two hosts constitutes an execution of the program. Operational semantics define the algorithmic response of each host to a received packet. Although each host separately receives, recognizes, and interprets individual packets, it is the union of client, server, internetwork, and operational semantics that collectively recognizes this language. This model of TFTP reveals an interesting consequence of RFC 783.
 
 %----------------------------------------------------------------------------------------
 %	OBJECTIVES
@@ -106,7 +104,7 @@ Phasellus imperdiet, tortor vitae congue bibendum, felis enim sagittis lorem, et
 \begin{enumerate}
 \item Characterize the protocol TFTP as a computer language.
 \item Describe the TFTP language syntax.
-\item Describe TFTP's operational semantics.
+\item Describe TFTP's operational semantics as the behavior of states in a state machine.
 \item Present a model of TFTP's denotational semantics.
 \item Illustrate successful ``execution'' of a TFTP ``program''.
 \item Illustrate a problematic execution -- known as Sorceror's Apprentice Syndrome.
@@ -118,53 +116,56 @@ Phasellus imperdiet, tortor vitae congue bibendum, felis enim sagittis lorem, et
 %	MATERIALS AND METHODS
 %----------------------------------------------------------------------------------------
 
-\section*{Materials and Methods}
+\section*{A Formal Language from TFTP}
 
 TFTP's grammar as defined in RFC 783, in Augmented BNF:
 \begin{grammar}
-<BYTE> ::= \%x00-FF
-
 <PAYLOAD> ::= .*
 
-<NUL> ::= \%x00
+<STR\_MODE> ::= "netascii" / "octet" / "mail"
 
-<STRING> ::= {\%x01-FF}+
+<FILENAME> :: {\%x01-FF}+
 
-<NETASCII> ::= "netascii"
+<ERR\_MSG> :: {\%x01-FF}+
 
-<OCTET> ::= "octet"
+<BLOCK\_NUM> ::= \%x00-FF \%x00-FF
 
-<MAIL> ::= "mail"
+<ERROR\_CODE> ::= \%x00-FF \%x00-FF
 
-<STR\_MODE> ::= <NETASCII> / <OCTET> / <MAIL>
+<PKT\_RRQ> ::= \%x00 \%x01 <FILENAME> \%x00 <STR\_MODE> \%x00
 
-<BLOCK\_NUM> ::= <BYTE> <BYTE>
+<PKT\_WRQ> ::= \%x00 \%x02 <OP\_WRQ> <FILENAME> \%x00 <STR\_MODE> \%x00
 
-<ERROR\_CODE> ::= <BYTE> <BYTE>
+<PKT\_DATA> ::= \%x00 \%x03 <BLOCK\_NUM> <PAYLOAD>
 
-<OP\_RRQ> ::= <NUL> \%x01
+<PKT\_ACK> ::= \%x00 \%x04 <BLOCK\_NUM>
 
-<OP\_WRQ> ::= <NUL> \%x02
-
-<OP\_DATA> ::= <NUL> \%x03
-
-<OP\_ACK> ::= <NUL> \%x04
-
-<OP\_ERROR> ::= <NUL> \%x05
-
-<PKT\_RRQ> ::= <OP\_RRQ> <STRING> <NUL> <STR\_MODE> <NUL>
-
-<PKT\_WRQ> ::= <OP\_WRQ> <STRING> <NUL> <STR\_MODE> <NUL>
-
-<PKT\_DATA> ::= <OP\_DATA> <BLOCK\_NUM> <PAYLOAD>
-
-<PKT\_ACK> ::= <OP\_ACK> <BLOCK\_NUM>
-
-<PKT\_ERROR> ::= <OP\_ERROR> <ERR\_CODE> <ERR\_MSG> <NUL>
+<PKT\_ERROR> ::= \%x00 \%x05 <OP\_ERROR> <ERR\_CODE> <ERR\_MSG> \%x00
 
 <PACKET> ::= <PKT\_RRQ> / <PKT\_WRQ> / <PKT\_DATA> / <PKT\_ACK> / <PKT\_ERROR>
 \end{grammar}
 
+Well-formed packets recognized by the above individually form the alphabet of the new grammar, which is annotated with instance parameters $f$ denoting a file of length $n$ blocks indexed by $i$, defined thusly:
+
+\begin{grammar}
+<START> ::= $\big[$<PKT\_RRQ>$_{f}$ <PKT\_WRQ>$_{f}\big]$ <LOOP>$_{f,1}$
+
+<DATA\_TIMEOUT$_{f,i}$> ::= <DATA>$_{f,i}$ <LOOP>$_{f,i}$
+
+<ACK\_TIMEOUT$_{f,i}$> ::= <ACK>$_{f,i}$ <LOOP>$_{f,i}$
+
+<DATA$_{f,i}$> ::= <PKT\_DATA>$_{f,i}$ <DATA\_TIMEOUT>$_{f,i}$?
+
+<ACK$_{f,i}$> ::= <PKT\_ACK>$_{f,i}$ <ACK\_TIMEOUT>$_{f,i}$?
+
+<LOOP$_{f,i}$> ::= <DATA>$_{f,i}$ <ACK>$_{f,i}$ <LOOP>$_{f,i+1}$ $\big/$ <STOP>
+
+<STOP> ::= <DATA>$_{f,n}$ <ACK>$_{f,n}$ $\big/$ <PKT\_ERROR>
+\end{grammar}
+
+This formalizes the end-point behavior described in RFC 783, namely that a session is initiated with PKT\_RRQ or PKT\_WRQ, and file blocks are sent one at a time via DATA commands which are each acknowledged by a ACK tagged with the block ID. If an endpoint times out awaiting an expected DATA or ACK it assumes this was lost and resends its own last packet by way of requesting retransmission, until all blocks have been transmitted or an error occurs. Figure n illustrates a successful transfer under this scheme, including once instance where block $j$ is lost and retransmitted, enabling recovery and successful completion:
+
+The loop only moves onto the next block when both the DATA and ACK have been transmitted. This provides assurance
 %------------------------------------------------
 
 \subsection*{Mathematical Section}
