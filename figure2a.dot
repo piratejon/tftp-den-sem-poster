@@ -1,0 +1,51 @@
+digraph {
+  subgraph cluster_client {
+    label="client"
+    client_t0 -> client_t2 -> client_lost_t4 -> client_t5 -> client_t7 -> client_t9 -> client_t11 -> client_t13 -> client_t15 [style=invis];
+    "client_lost_t4" -> "client_t5" [label=<TO<SUB>D,2</SUB>>];
+  }
+
+  subgraph cluster_server {
+    label="server"
+    server_t1 -> server_t3 -> server_dummy_0 -> server_t6 -> server_t8 -> server_t10 -> server_t12 -> server_t14 -> server_t16 [style=invis];
+  }
+
+  client_t0[label=<t<SUB>0</SUB>>];
+  client_t2[label=<t<SUB>2</SUB>>];
+  client_t5[label=<t<SUB>5</SUB>>];
+  client_t7[label=<t<SUB>7</SUB>>];
+  client_t9[label=<t<SUB>9</SUB>>];
+  client_t11[label=<t<SUB>11</SUB>>];
+  client_t13[label=<t<SUB>13</SUB>>];
+  client_t15[label=<t<SUB>15</SUB>>];
+
+  server_t1[label=<t<SUB>1</SUB>>];
+  server_t3[label=<t<SUB>3</SUB>>];
+  server_t6[label=<t<SUB>6</SUB>>];
+  server_t8[label=<t<SUB>8</SUB>>];
+  server_t10[label=<t<SUB>10</SUB>>];
+  server_t12[label=<t<SUB>12</SUB>>];
+  server_t14[label=<t<SUB>14</SUB>>];
+  server_t16[label=<t<SUB>16</SUB>>];
+
+  server_dummy_0[style="invisible",label="lol"];
+
+  client_lost_t4[shape="tripleoctagon", label="lost"];
+
+  "client_t0" -> "server_t1" [constraint=false,label="RRQ"];
+  "server_t1" -> "client_t2" [constraint=false,label=<DAT<SUB>1</SUB>>];
+  "client_t2" -> "server_t3" [constraint=false,label=<ACK<SUB>1</SUB>>];
+  "server_t3" -> "client_lost_t4" [constraint=false,label=<DAT<SUB>2</SUB>>,style="dotted"];
+  "client_t5" -> "server_t6" [constraint=false,label=<ACK<SUB>1</SUB>>];
+  "server_t6" -> "client_t7" [constraint=false,label=<DAT<SUB>2</SUB>>];
+  "client_t7" -> "server_t8" [constraint=false,label=<ACK<SUB>2</SUB>>];
+  "server_t8" -> "client_t9" [constraint=false,label=<DAT<SUB>3</SUB>>];
+  "client_t9" -> "server_t10" [constraint=false,label=<ACK<SUB>3</SUB>>];
+  "server_t10" -> "client_t11" [constraint=false,label=<DAT<SUB>4</SUB>>];
+  "client_t11" -> "server_t12" [constraint=false,label=<ACK<SUB>4</SUB>>];
+  "server_t12" -> "client_t13" [constraint=false,label=<DAT<SUB>5</SUB>>];
+  "client_t13" -> "server_t14" [constraint=false,label=<ACK<SUB>5</SUB>>];
+  "server_t14" -> "client_t15" [constraint=false,label=<DAT<SUB>6</SUB>>];
+  "client_t15" -> "server_t16" [constraint=false,label=<ACK<SUB>6</SUB>>];
+}
+
