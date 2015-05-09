@@ -1,4 +1,15 @@
 strict digraph {
+  subgraph cluster_client {
+    label="client"
+    client0 -> client1 -> client2 -> client3 -> client4 -> client5 -> client6 [style=invis];
+  }
+
+  subgraph cluster_server {
+    label="server"
+    server0 -> server1 -> server2 -> server3 -> server4 -> server5 -> server6 [style=invis];
+  }
+
+  /*
   {rank=same client0 server0}
   {rank=same client1 server1}
   {rank=same client2 server2}
@@ -6,28 +17,36 @@ strict digraph {
   {rank=same client4 server4}
   {rank=same client5 server5}
   {rank=same client6 server6}
-  subgraph cluster_client {
-    style=invis;
-    client0 -> client1 -> client2 -> client3 -> client4 -> client5 -> client6 [style=invis];
-  }
+  */
 
-  subgraph cluster_server {
-    style=invis;
-    server0 -> server1 -> server2 -> server3 -> server4 -> server5 -> server6 [style=invis];
-  }
+  client0[label=<t<SUB>0</SUB>>];
+  client1[label=<t<SUB>2</SUB>>];
+  client2[label=<t<SUB>4</SUB>>];
+  client3[label=<t<SUB>6</SUB>>];
+  client4[label=<t<SUB>8</SUB>>];
+  client5[label=<t<SUB>10</SUB>>];
+  client6[label=<t<SUB>12</SUB>>];
 
-  "client0" -> "server0" [label="RRQ"];
-  "server0" -> "client1" [label="DAT_1"];
-  "client1" -> "server1" [label="ACK_1"];
-  "server1" -> "client2" [label="DAT_2"];
-  "client2" -> "server2" [label="ACK_2"];
-  "server2" -> "client3" [label="DAT_3"];
-  "client3" -> "server3" [label="ACK_3"];
-  "server3" -> "client4" [label="DAT_4"];
-  "client4" -> "server4" [label="ACK_4"];
-  "server4" -> "client5" [label="DAT_5"];
-  "client5" -> "server5" [label="ACK_5"];
-  "server5" -> "client6" [label="DAT_6"];
-  "client6" -> "server6" [label="ACK_6"];
+  server0[label=<t<SUB>1</SUB>>];
+  server1[label=<t<SUB>3</SUB>>];
+  server2[label=<t<SUB>5</SUB>>];
+  server3[label=<t<SUB>7</SUB>>];
+  server4[label=<t<SUB>9</SUB>>];
+  server5[label=<t<SUB>11</SUB>>];
+  server6[label=<t<SUB>13</SUB>>];
+
+  "client0" -> "server0" [constraint=false,label="RRQ"];
+  "server0" -> "client1" [constraint=false,label=<DAT<SUB>1</SUB>>];
+  "client1" -> "server1" [constraint=false,label=<ACK<SUB>1</SUB>>];
+  "server1" -> "client2" [constraint=false,label=<DAT<SUB>2</SUB>>];
+  "client2" -> "server2" [constraint=false,label=<ACK<SUB>2</SUB>>];
+  "server2" -> "client3" [constraint=false,label=<DAT<SUB>3</SUB>>];
+  "client3" -> "server3" [constraint=false,label=<ACK<SUB>3</SUB>>];
+  "server3" -> "client4" [constraint=false,label=<DAT<SUB>4</SUB>>];
+  "client4" -> "server4" [constraint=false,label=<ACK<SUB>4</SUB>>];
+  "server4" -> "client5" [constraint=false,label=<DAT<SUB>5</SUB>>];
+  "client5" -> "server5" [constraint=false,label=<ACK<SUB>5</SUB>>];
+  "server5" -> "client6" [constraint=false,label=<DAT<SUB>6</SUB>>];
+  "client6" -> "server6" [constraint=false,label=<ACK<SUB>6</SUB>>];
 }
 
