@@ -1,0 +1,33 @@
+strict digraph {
+  {rank=same client0 server0}
+  {rank=same client1 server1}
+  {rank=same client2 server2}
+  {rank=same client3 server3}
+  {rank=same client4 server4}
+  {rank=same client5 server5}
+  {rank=same client6 server6}
+  subgraph cluster_client {
+    style=invis;
+    client0 -> client1 -> client2 -> client3 -> client4 -> client5 -> client6 [style=invis];
+  }
+
+  subgraph cluster_server {
+    style=invis;
+    server0 -> server1 -> server2 -> server3 -> server4 -> server5 -> server6 [style=invis];
+  }
+
+  "client0" -> "server0" [label="RRQ"];
+  "server0" -> "client1" [label="DAT_1"];
+  "client1" -> "server1" [label="ACK_1"];
+  "server1" -> "client2" [label="DAT_2"];
+  "client2" -> "server2" [label="ACK_2"];
+  "server2" -> "client3" [label="DAT_3"];
+  "client3" -> "server3" [label="ACK_3"];
+  "server3" -> "client4" [label="DAT_4"];
+  "client4" -> "server4" [label="ACK_4"];
+  "server4" -> "client5" [label="DAT_5"];
+  "client5" -> "server5" [label="ACK_5"];
+  "server5" -> "client6" [label="DAT_6"];
+  "client6" -> "server6" [label="ACK_6"];
+}
+
