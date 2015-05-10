@@ -29,6 +29,7 @@
 \usepackage{times} % Use the times font
 %\usepackage{palatino} % Uncomment to use the Palatino font
 
+\usepackage{float}
 \usepackage{graphicx} % Required for including images
 \graphicspath{{figures/}} % Location of the graphics files
 \usepackage{booktabs} % Top and bottom rules for table
@@ -53,7 +54,7 @@
 \hspace{9cm}
 \begin{minipage}[b]{0.59\linewidth}
 \veryHuge \color{NavyBlue} \textbf{Curing Sorceror's Apprentice Syndrome} \color{Black}\\ % Title
-\Huge\textit{An Application of Formal Semantics to a Real-World Protocol}\\[1cm] % Subtitle
+\Huge\textit{Examining a Real-World Protocol with Denotational Semantics}\\[1cm] % Subtitle
 \huge \textbf{Jonathan Wesley Stone}\\ % Author(s)
 \huge Advisor: Dr. Tom Turner\\
 \huge University of Central Oklahoma Department of Computer Science\\ % University/organization
@@ -164,7 +165,27 @@ Well-formed packets recognized by the above individually form the alphabet of th
 <STOP> ::= <DATA>$_{f,n}$ <ACK>$_{f,n}$ $\big/$ <PKT\_ERROR>
 \end{grammar}
 
-This formalizes the end-point behavior described in RFC 783, namely that a session is initiated with PKT\_RRQ or PKT\_WRQ, and file blocks are sent one at a time via DATA commands which are each acknowledged by a ACK tagged with the block ID. If an endpoint times out awaiting an expected DATA or ACK it assumes this was lost and resends its own last packet by way of requesting retransmission, until all blocks have been transmitted or an error occurs. Figure n illustrates a successful transfer under this scheme, including once instance where block $j$ is lost and retransmitted, enabling recovery and successful completion:
+This formalizes the end-point behavior described in RFC 783, namely that a session is initiated with PKT\_RRQ or PKT\_WRQ, and file blocks are sent one at a time via DATA commands which are each acknowledged by a ACK tagged with the block ID. If an endpoint times out awaiting an expected DATA or ACK it assumes this was lost and resends its own last packet by way of requesting retransmission, until all blocks have been transmitted or an error occurs. Figures 1 and 2 illustrate a successful transfer with no errors, and a successful transfer that recovered from a timeout of block 2:
+
+\begin{minipage}{\linewidth}
+\centering
+  \begin{minipage}{0.45\linewidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+      \includegraphics[width=.8\columnwidth,keepaspectratio]{figure2a.png}
+      \caption{A successful transfer, recovering from one timeout.}
+    \end{figure}
+  \end{minipage}
+  \begin{minipage}{0.45\linewidth}
+    \centering
+    \begin{figure}[H]
+    \centering
+      \includegraphics[width=.8\columnwidth,keepaspectratio]{figure3a.png}
+      \caption{A pathological transfer where delay causes duplication.}
+    \end{figure}
+  \end{minipage}
+\end{minipage}
 
 The loop only moves onto the next block when both the DATA and ACK have been transmitted. This provides assurance that all blocks are ultimately transmitted and received by the time the last block has been transmitted. This presents a problem, however. In the unlikely event a particular packet cannot be transmitted (i.e. continually gets lost/dropped), the transmission may never complete and the program theoretically does not terminate. In a more likely scenario, packets can be delayed in transmission beyond the timeout value. Intuitionally, the endpoint need not resend a packet which has been acknowledged, but the current specification does not provide for that exception.
 %------------------------------------------------
@@ -184,8 +205,6 @@ The loop only moves onto the next block when both the DATA and ACK have been tra
 \end{grammar}
 
 The denotational semantics of this language look like this:
-\begin{algorithmic}
-\end{algorithmic}
 
 \begin{equation}
 E = mc^{2}
