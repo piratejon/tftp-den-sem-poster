@@ -1,46 +1,49 @@
 digraph {
   subgraph cluster_client {
     label="client"
-    client_t0 -> client_t2 -> client_lost_t4 -> client_t5 -> client_t6 ->
-    client_t7 -> client_t8 -> client_t9 -> client_t10 -> client_t11 ->
-    client_t12 -> client_t13 -> client_t14 -> client_t15 [style=invis];
+    client_t0 -> client_t2 -> client_lost_t4 ->
+    client_t5 -> client_t7 -> client_t9 -> client_t11 ->
+    client_t13 -> client_t15 -> client_t17 -> client_t19 ->
+    client_t21 -> client_t23 -> client_t25 [style=invis];
     "client_lost_t4" -> "client_t5" [label=<TO<SUB>D,2</SUB>>];
   }
 
   subgraph cluster_server {
     label="server"
-    server_t1 -> server_t3 -> server_dummy_0 -> server_t6 -> server_t7 ->
-    server_t8 -> server_t9 -> server_t10 -> server_t11 -> server_t12 ->
-    server_t13 -> server_t14 -> server_t15 -> server_t16 [style=invis];
+    server_t1 -> server_t3 -> server_dummy_0 ->
+    server_t6 -> server_t8 -> server_t10 -> server_t12 ->
+    server_t14 -> server_t16 -> server_t18 -> server_t20 ->
+    server_t22 -> server_t24 -> server_t26
+    [style=invis];
   }
 
   client_t0[label=<t<SUB>0</SUB>>];
   client_t2[label=<t<SUB>2</SUB>>];
   client_t5[label=<t<SUB>5</SUB>>];
-  client_t6[label=<t<SUB>6</SUB>>];
   client_t7[label=<t<SUB>7</SUB>>];
-  client_t8[label=<t<SUB>8</SUB>>];
   client_t9[label=<t<SUB>9</SUB>>];
-  client_t10[label=<t<SUB>10</SUB>>];
   client_t11[label=<t<SUB>11</SUB>>];
-  client_t12[label=<t<SUB>12</SUB>>];
   client_t13[label=<t<SUB>13</SUB>>];
-  client_t14[label=<t<SUB>14</SUB>>];
   client_t15[label=<t<SUB>15</SUB>>];
+  client_t17[label=<t<SUB>17</SUB>>];
+  client_t19[label=<t<SUB>19</SUB>>];
+  client_t21[label=<t<SUB>21</SUB>>];
+  client_t23[label=<t<SUB>23</SUB>>];
+  client_t25[label=<t<SUB>25</SUB>>]; 
 
   server_t1[label=<t<SUB>1</SUB>>];
   server_t3[label=<t<SUB>3</SUB>>];
   server_t6[label=<t<SUB>6</SUB>>];
-  server_t7[label=<t<SUB>7</SUB>>];
   server_t8[label=<t<SUB>8</SUB>>];
-  server_t9[label=<t<SUB>9</SUB>>];
   server_t10[label=<t<SUB>10</SUB>>];
-  server_t11[label=<t<SUB>10</SUB>>];
   server_t12[label=<t<SUB>12</SUB>>];
-  server_t13[label=<t<SUB>10</SUB>>];
   server_t14[label=<t<SUB>14</SUB>>];
-  server_t15[label=<t<SUB>10</SUB>>];
   server_t16[label=<t<SUB>16</SUB>>];
+  server_t18[label=<t<SUB>18</SUB>>];
+  server_t20[label=<t<SUB>20</SUB>>];
+  server_t22[label=<t<SUB>22</SUB>>];
+  server_t24[label=<t<SUB>24</SUB>>];
+  server_t26[label=<t<SUB>26</SUB>>];
 
   server_dummy_0[style="invisible",label="lol"];
 
@@ -50,29 +53,30 @@ digraph {
   "client_t0" -> "server_t1" [constraint=false,label="RRQ"];
   "server_t1" -> "client_t2" [constraint=false,label=<DAT<SUB>1</SUB>>];
   "client_t2" -> "server_t3" [constraint=false,label=<ACK<SUB>1</SUB>>];
+
   "server_t3" -> "client_lost_t4" [constraint=false,label=<DAT<SUB>2</SUB>>,style="dotted"];
-  "client_t5" -> "server_t6" [constraint=false,label=<ACK<SUB>1</SUB>>];
-  "server_t6" -> "client_t7" [constraint=false,label=<DAT<SUB>2</SUB> (dup)>];
-  "client_t7" -> "server_t8" [constraint=false,label=<ACK<SUB>2</SUB>>];
-  "server_t8" -> "client_t9" [constraint=false,label=<DAT<SUB>3</SUB> (dup)>];
-  "client_t9" -> "server_t10" [constraint=false,label=<ACK<SUB>3</SUB>>];
-  "server_t10" -> "client_t11" [constraint=false,label=<DAT<SUB>4</SUB> (dup)>];
-  "client_t11" -> "server_t12" [constraint=false,label=<ACK<SUB>4</SUB>>];
-  "server_t12" -> "client_t13" [constraint=false,label=<DAT<SUB>5</SUB> (dup)>];
-  "client_t13" -> "server_t14" [constraint=false,label=<ACK<SUB>5</SUB>>];
-  "server_t14" -> "client_t15" [constraint=false,label=<DAT<SUB>6</SUB> (dup)>];
-  "client_t15" -> "server_t16" [constraint=false,label=<ACK<SUB>6</SUB>>];
+  "client_t5" -> "server_t6" [constraint=false,label=<ACK<SUB>1</SUB>>,color="red"];
+  "server_t6" -> "client_t9" [constraint=false,label=<DAT<SUB>2</SUB> (dup)>,color="red"];
+  "client_t9" -> "server_t10" [constraint=false,label=<ACK<SUB>2</SUB>>,color="red"];
+  "server_t10" -> "client_t13" [constraint=false,label=<DAT<SUB>3</SUB> (dup)>,color="red"];
+  "client_t13" -> "server_t14" [constraint=false,label=<ACK<SUB>3</SUB>>,color="red"];
+  "server_t14" -> "client_t17" [constraint=false,label=<DAT<SUB>4</SUB> (dup)>,color="red"];
+  "client_t17" -> "server_t18" [constraint=false,label=<ACK<SUB>4</SUB>>,color="red"];
+  "server_t18" -> "client_t21" [constraint=false,label=<DAT<SUB>5</SUB> (dup)>,color="red"];
+  "client_t21" -> "server_t22" [constraint=false,label=<ACK<SUB>5</SUB>>,color="red"];
+  "server_t22" -> "client_t25" [constraint=false,label=<DAT<SUB>6</SUB> (dup)>,color="red"];
+  "client_t25" -> "server_t26" [constraint=false,label=<ACK<SUB>6</SUB>>,color="red"];
 
   // 2nd sequence begins when first DAT2 arrives
-  "server_t3" -> "client_t6" [constraint=false,label=<DAT<SUB>2</SUB> (delayed)>];
-  "client_t6" -> "server_t7" [constraint=false,label=<ACK<SUB>2</SUB>>]; // late sequence begins
-  "server_t7" -> "client_t8" [constraint=false,label=<DAT<SUB>3</SUB>>];
-  "client_t8" -> "server_t9" [constraint=false,label=<ACK<SUB>3</SUB>>]; // late sequence begins
-  "server_t9" -> "client_t10" [constraint=false,label=<DAT<SUB>4</SUB>>];
-  "client_t10" -> "server_t11" [constraint=false,label=<ACK<SUB>4</SUB>>]; // late sequence begins
-  "server_t11" -> "client_t12" [constraint=false,label=<DAT<SUB>5</SUB>>];
-  "client_t12" -> "server_t13" [constraint=false,label=<ACK<SUB>5</SUB>>]; // late sequence begins
-  "server_t13" -> "client_t14" [constraint=false,label=<DAT<SUB>6</SUB>>];
-  "client_t14" -> "server_t15" [constraint=false,label=<ACK<SUB>6</SUB>>]; // late sequence begins
+  "server_t3" -> "client_t7" [constraint=false,label=<DAT<SUB>2</SUB> (delayed)>];
+  "client_t7" -> "server_t8" [constraint=false,label=<ACK<SUB>2</SUB>>]; // late sequence begins
+  "server_t8" -> "client_t11" [constraint=false,label=<DAT<SUB>3</SUB>>];
+  "client_t11" -> "server_t12" [constraint=false,label=<ACK<SUB>3</SUB>>]; // late sequence begins
+  "server_t12" -> "client_t15" [constraint=false,label=<DAT<SUB>4</SUB>>];
+  "client_t15" -> "server_t16" [constraint=false,label=<ACK<SUB>4</SUB>>]; // late sequence begins
+  "server_t16" -> "client_t19" [constraint=false,label=<DAT<SUB>5</SUB>>];
+  "client_t19" -> "server_t20" [constraint=false,label=<ACK<SUB>5</SUB>>]; // late sequence begins
+  "server_t20" -> "client_t23" [constraint=false,label=<DAT<SUB>6</SUB>>];
+  "client_t23" -> "server_t24" [constraint=false,label=<ACK<SUB>6</SUB>>]; // late sequence begins
 }
 
