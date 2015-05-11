@@ -53,7 +53,7 @@
 %
 \hspace{9cm}
 \begin{minipage}[b]{0.59\linewidth}
-\veryHuge \color{NavyBlue} \textbf{Curing Sorceror's Apprentice Syndrome} \color{Black}\\ % Title
+\veryHuge \color{NavyBlue} \textbf{Curing Sorcerer's Apprentice Syndrome} \color{Black}\\ % Title
 \Huge\textit{Examining a Real-World Protocol with Denotational Semantics}\\[1cm] % Subtitle
 \huge \textbf{Jonathan Wesley Stone}\\ % Author(s)
 \huge Advisor: Dr. Tom Turner\\
@@ -79,7 +79,7 @@
 
 \begin{abstract}
 
-The formal semantics of computer languages may be specified operationally, denotationally, or axiomatically. This poster considers the TFTP protocol as a computer language. The protocol's grammar is taken as the language's syntax. Protocol endpoints emit language statements which are interpreted by their remote counterparts. Semantics are understood as defining protocol endpoint behavior. Operational and denotational semantics are modeled and evaluated. The sorceror's apprentice syndrome condition arising from under-specified operational semantics is identified by denotational semantics. The denotational semantic description is modified to correct the syndrome without sacrificing the protocol's functional usefulness.
+The formal semantics of computer languages may be specified operationally, denotationally, or axiomatically. This poster considers the TFTP protocol as a computer language. The protocol's grammar is taken as the language's syntax. Protocol endpoints emit language statements which are interpreted by their remote counterparts. Semantics are understood as defining protocol endpoint behavior. Operational and denotational semantics are modeled and evaluated. The sorcerer's apprentice syndrome condition arising from under-specified operational semantics is identified by denotational semantics. The denotational semantic description is modified to correct the syndrome without sacrificing the protocol's functional usefulness.
 
 \end{abstract}
 
@@ -109,8 +109,8 @@ TFTP is treated here as a formal language whose alphabet consists of packets adm
 \item Describe TFTP's operational semantics as the behavior of states in a state machine.
 \item Present a model of TFTP's denotational semantics.
 \item Illustrate successful ``execution'' of a TFTP ``program''.
-\item Illustrate a problematic execution -- known as Sorceror's Apprentice Syndrome.
-\item Modify the denotational semantics to preclude Sorceror's Apprentice Syndrome.
+\item Illustrate a problematic execution -- known as Sorcerer's Apprentice Syndrome.
+\item Modify the denotational semantics to preclude Sorcerer's Apprentice Syndrome.
 \item Translate the modified denotational semantics back into operational semantics.
 \end{enumerate}
 
@@ -187,7 +187,7 @@ This formalizes the end-point behavior described in RFC 783, namely that a sessi
   \end{minipage}
 \end{minipage}
 
-The loop only moves onto the next block when both the DATA and ACK have been transmitted. This provides assurance that all blocks are ultimately transmitted and received by the time the last block has been transmitted. This presents a problem, however. In the unlikely event a particular packet cannot be transmitted (i.e. continually gets lost/dropped), the transmission may never complete and the program theoretically does not terminate. In a more likely scenario, packets can be delayed in transmission beyond the timeout value. Intuitionally, the endpoint need not resend a packet which has already been acknowledged, but RFC 738 leaves this decision to the implementor without discussion of the potential issue. When the sender simply treats every ACK as a cue to send the next data block, duplication of all subsequent data block transmissions occurs. When the packet delay rate increases as a function of network utilization, the effects compound and are known as the Sorceror's Apprentice Syndrome (RFC 1138) (Figure 2).
+The loop only moves onto the next block when both the DATA and ACK have been transmitted. This provides assurance that all blocks are ultimately transmitted and received by the time the last block has been transmitted. This presents a problem, however. In the unlikely event a particular packet cannot be transmitted (i.e. continually gets lost/dropped), the transmission may never complete and the program theoretically does not terminate. In a more likely scenario, packets can be delayed in transmission beyond the timeout value. Intuitionally, the endpoint need not resend a packet which has already been acknowledged, but RFC 738 leaves this decision to the implementor without discussion of the potential issue. When the sender simply treats every ACK as a cue to send the next data block, duplication of all subsequent data block transmissions occurs. When the packet delay rate increases as a function of network utilization, the effects compound and are known as the Sorcerer's Apprentice Syndrome (RFC 1138) (Figure 2).
 
 %------------------------------------------------
 
@@ -238,7 +238,7 @@ M_{T_{d}}(D_{i}, s) = &\text{send $D_{i}$} \\
 
 It is clear that in the first version, the number of data packets is effectively unbounded, being allowed to vary with the number of timeouts. In the revised denotational semantics, the data packets transmitted is identical to the set of data packets transmitted in an ideal session.
 
-The Sorceror's Apprentice Syndrome was identified in publication in RFC 1138 (Dec. 1989) after it must have been observed in practice. Although the issue and its fix are intuitively obvious, it would have been caught immediately had the initial design been subjected to a thorough semantic analysis. The practical value of thorough analysis in protocol design is evident.
+The Sorcerer's Apprentice Syndrome was identified in publication in RFC 1138 (Dec. 1989) after it must have been observed in practice. Although the issue and its fix are intuitively obvious, it would have been caught immediately had the initial design been subjected to a thorough semantic analysis. The practical value of thorough analysis in protocol design is evident.
 
 %----------------------------------------------------------------------------------------
 %	REFERENCES
